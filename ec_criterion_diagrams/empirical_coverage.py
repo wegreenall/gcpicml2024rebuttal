@@ -1,4 +1,4 @@
-igmport torch
+import torch
 import torch.distributions as D
 import pandas as pd
 from ortho.basis_functions import Basis, standard_chebyshev_basis
@@ -49,9 +49,7 @@ class EmpiricalCoverageRunner:
         assert domains.shape
         self.domains = domains
         self.dimension = dimension
-        self.uniform = D.Uniform(
-            low=self.domains[:, 0], high=self.domains[:, 1]
-        )
+        self.uniform = D.Uniform(low=self.domains[:, 0], high=self.domains[:, 1])
 
         # check that the data set has enough dimensions
         if len(data_set.shape) == 1:
@@ -97,18 +95,10 @@ class EmpiricalCoverageRunner:
         # get lower bounds and upper bounds
         lower_bounds = extended_random_sets[:, :, 0, :]
         upper_bounds = extended_random_sets[:, :, 1, :]
-        upper_diffs = (
-            upper_bounds - extended_sample
-        )  # samples is below the UPPER bound
-        lower_diffs = (
-            extended_sample - lower_bounds
-        )  # samples is above the LOWER bound
-        upper_mask = (
-            upper_diffs > 0
-        ) * 1  # 1 if the sample is below the upper bound
-        lower_mask = (
-            lower_diffs > 0
-        ) * 1  # 1 if the sample is above the lower bound
+        upper_diffs = upper_bounds - extended_sample  # samples is below the UPPER bound
+        lower_diffs = extended_sample - lower_bounds  # samples is above the LOWER bound
+        upper_mask = (upper_diffs > 0) * 1  # 1 if the sample is below the upper bound
+        lower_mask = (lower_diffs > 0) * 1  # 1 if the sample is above the lower bound
 
         in_set_mask = torch.prod(upper_mask * lower_mask, dim=2)
         set_counts = torch.sum(in_set_mask, dim=0)
@@ -131,7 +121,9 @@ if __name__ == "__main__":
             torch.Tensor([[0, 100]]),
         ]
         synth_data_sets = []
-        data_loc = "~/phd/programming_projects/gcp_rssb/datasets/comparison_experiments/"
+        data_loc = (
+            "~/phd/programming_projects/gcp_rssb/datasets/comparison_experiments/"
+        )
         for c in range(3):
             df = pd.read_csv(data_loc + "synth{}.csv".format(c + 1))
             data_set = torch.tensor(df.values).squeeze()
@@ -192,9 +184,7 @@ if __name__ == "__main__":
                 method_names = ["osegcp", "vbpp", "lbpp", "rkhs"]
                 sample_names = ["synth1", "synth2", "synth3"]
                 mean_std_data = {"synth1": [], "synth2": [], "synth3": []}
-                residuals = torch.zeros(
-                    set_count, sample_count, len(method_names)
-                )
+                residuals = torch.zeros(set_count, sample_count, len(method_names))
                 for i in range(sample_count):
                     osegcp_sample = osegcp.get_posterior_predictive_sample()
                     vbpp_sample = torch.load(
@@ -215,21 +205,17 @@ if __name__ == "__main__":
                     ]
 
                     # get the residuals for this sample
-                    residual_means = torch.zeros(
-                        sample_count, len(predictive_samples)
-                    )
-                    residual_std = torch.zeros(
-                        sample_count, len(predictive_samples)
-                    )
+                    residual_means = torch.zeros(sample_count, len(predictive_samples))
+                    residual_std = torch.zeros(sample_count, len(predictive_samples))
                     for k, sample, method_name in zip(
                         range(len(predictive_samples)),
                         predictive_samples,
                         method_names,
                     ):
                         sample = sample.unsqueeze(1)
-                        residuals[
-                            :, i, k
-                        ] = empirical_coverage_runner.check_sample(sample)
+                        residuals[:, i, k] = empirical_coverage_runner.check_sample(
+                            sample
+                        )
                 final_means = torch.mean(residuals, dim=0)
                 final_squared_means = torch.mean(final_means**2, dim=0)
                 print("\n")
@@ -298,9 +284,7 @@ if __name__ == "__main__":
                 )
 
                 method_names = ["osegcp", "vbpp", "lbpp", "rkhs"]
-                residuals = torch.zeros(
-                    set_count, sample_count, len(method_names)
-                )
+                residuals = torch.zeros(set_count, sample_count, len(method_names))
                 for i in range(sample_count):
                     osegcp_sample = osegcp.get_posterior_predictive_sample()
                     vbpp_sample = torch.load(
@@ -321,20 +305,16 @@ if __name__ == "__main__":
                     ]
 
                     # get the residuals for this sample
-                    residual_means = torch.zeros(
-                        sample_count, len(predictive_samples)
-                    )
-                    residual_std = torch.zeros(
-                        sample_count, len(predictive_samples)
-                    )
+                    residual_means = torch.zeros(sample_count, len(predictive_samples))
+                    residual_std = torch.zeros(sample_count, len(predictive_samples))
                     for k, sample, method_name in zip(
                         range(len(predictive_samples)),
                         predictive_samples,
                         method_names,
                     ):
-                        residuals[
-                            :, i, k
-                        ] = empirical_coverage_runner.check_sample(sample)
+                        residuals[:, i, k] = empirical_coverage_runner.check_sample(
+                            sample
+                        )
                 final_means = torch.mean(residuals, dim=0)
                 final_squared_means = torch.mean(final_means**2, dim=0)
                 print("\n")
@@ -385,9 +365,7 @@ if __name__ == "__main__":
                         }
                     ] * dimension
                     basis_functions = [standard_chebyshev_basis] * 2
-                    ortho_basis = Basis(
-                        basis_functions, dimension, order, params
-                    )
+                    ortho_basis = Basis(basis_functions, dimension, order, params)
 
                     # set up the model
                     gcp_ose_hyperparams = GCPOSEHyperparameters(
@@ -411,14 +389,10 @@ if __name__ == "__main__":
                     # method_names = ["osegcp", "vbpp", "lbpp", "rkhs"]
                     residuals = torch.zeros(set_count, sample_count)
                     for i in range(sample_count):
-                        osegcp_sample = (
-                            osegcp.get_posterior_predictive_sample()
-                        )
+                        osegcp_sample = osegcp.get_posterior_predictive_sample()
 
                         # get the residuals for this sample
-                        residuals[
-                            :, i
-                        ] = empirical_coverage_runner.check_sample(
+                        residuals[:, i] = empirical_coverage_runner.check_sample(
                             osegcp_sample
                         )
                     final_means = torch.mean(residuals, dim=0)
@@ -430,12 +404,8 @@ if __name__ == "__main__":
             print("EC criterion:", ec_criterion)
             torch.save(ec_criterion, "ec_criterion_2D.pt")
         else:
-            ec_criterion_redwood = torch.load("ec_criterion_2D_redwood.pt")[
-                :, 0
-            ]
-            ec_criterion_whiteoak = torch.load("ec_criterion_2D_whiteoak.pt")[
-                :, 1
-            ]
+            ec_criterion_redwood = torch.load("ec_criterion_2D_redwood.pt")[:, 0]
+            ec_criterion_whiteoak = torch.load("ec_criterion_2D_whiteoak.pt")[:, 1]
         # print("recommended order:", orders[torch.argmin(ec_criterion)])
 
         # save the  ec_criterion tensor
@@ -448,9 +418,7 @@ if __name__ == "__main__":
         plt.xlabel("Order")
         plt.ylabel("EC Criterion")
         plt.legend()
-        plt.savefig(
-            "~/phd/tex_projects/gcp_icml2024/ec_criterion_redwood.png"
-        )
+        plt.savefig("~/phd/tex_projects/gcp_icml2024/ec_criterion_redwood.png")
 
         plt.plot(
             range(15, 50),
@@ -461,7 +429,5 @@ if __name__ == "__main__":
         plt.xlabel("Order")
         plt.ylabel("EC Criterion")
         plt.legend()
-        plt.savefig(
-            "~/phd/tex_projects/gcp_icml2024/ec_criterion_whiteoak.png"
-        )
+        plt.savefig("~/phd/tex_projects/gcp_icml2024/ec_criterion_whiteoak.png")
         # plt.show()
