@@ -419,7 +419,7 @@ if __name__ == "__main__":
         plt.ylabel("EC Criterion")
         plt.legend()
         plt.savefig("~/phd/tex_projects/gcp_icml2024/ec_criterion_redwood.png")
-
+        plt.cla()
         plt.plot(
             range(15, 50),
             ec_criterion_whiteoak,
