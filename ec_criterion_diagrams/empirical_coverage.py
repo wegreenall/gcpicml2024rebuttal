@@ -1,4 +1,4 @@
-import torch
+igmport torch
 import torch.distributions as D
 import pandas as pd
 from ortho.basis_functions import Basis, standard_chebyshev_basis
@@ -131,7 +131,7 @@ if __name__ == "__main__":
             torch.Tensor([[0, 100]]),
         ]
         synth_data_sets = []
-        data_loc = "/home/william/phd/programming_projects/gcp_rssb/datasets/comparison_experiments/"
+        data_loc = "~/phd/programming_projects/gcp_rssb/datasets/comparison_experiments/"
         for c in range(3):
             df = pd.read_csv(data_loc + "synth{}.csv".format(c + 1))
             data_set = torch.tensor(df.values).squeeze()
@@ -244,16 +244,16 @@ if __name__ == "__main__":
         dimension = 2
         order = 15
         set_count = 8000
-        data_loc = "/home/william/phd/programming_projects/gcp_rssb/datasets/comparison_experiments/data_and_samples/samples_update/samples2D/"
+        data_loc = "~/phd/programming_projects/gcp_rssb/datasets/comparison_experiments/data_and_samples/samples_update/samples2D/"
         domains = [
             torch.Tensor([[0, 1], [0, 1]]),  # redwood
             torch.Tensor([[0, 1], [0, 1]]),  # white oak
         ]
         redwood_df = pd.read_csv(
-            "/home/william/phd/programming_projects/gcp_rssb/datasets/spatial-2D/redwood_full.csv"
+            "~/phd/programming_projects/gcp_rssb/datasets/spatial-2D/redwood_full.csv"
         )
         white_oak_df = pd.read_csv(
-            "/home/william/phd/programming_projects/gcp_rssb/datasets/spatial-2D/white_oak.csv"
+            "~/phd/programming_projects/gcp_rssb/datasets/spatial-2D/white_oak.csv"
         )
         # data_set = torch.tensor(df.values).squeeze()
         data_sets = [
@@ -349,13 +349,13 @@ if __name__ == "__main__":
         min_range = 15
         orders = range(min_range, 50)
         set_count = 9000
-        data_loc = "/home/william/phd/programming_projects/gcp_rssb/datasets/comparison_experiments/data_and_samples/samples_update/samples2D/"
+        data_loc = "~/phd/programming_projects/gcp_rssb/datasets/comparison_experiments/data_and_samples/samples_update/samples2D/"
         synth_data_sets = []
         redwood_df = pd.read_csv(
-            "/home/william/phd/programming_projects/gcp_rssb/datasets/spatial-2D/redwood_full.csv"
+            "~/phd/programming_projects/gcp_rssb/datasets/spatial-2D/redwood_full.csv"
         )
         white_oak_df = pd.read_csv(
-            "/home/william/phd/programming_projects/gcp_rssb/datasets/spatial-2D/white_oak.csv"
+            "~/phd/programming_projects/gcp_rssb/datasets/spatial-2D/white_oak.csv"
         )
         # data_set = torch.tensor(df.values).squeeze()
         domains = [
@@ -449,7 +449,7 @@ if __name__ == "__main__":
         plt.ylabel("EC Criterion")
         plt.legend()
         plt.savefig(
-            "/home/william/phd/tex_projects/gcp_icml2024/ec_criterion_redwood.png"
+            "~/phd/tex_projects/gcp_icml2024/ec_criterion_redwood.png"
         )
 
         plt.plot(
@@ -462,6 +462,6 @@ if __name__ == "__main__":
         plt.ylabel("EC Criterion")
         plt.legend()
         plt.savefig(
-            "/home/william/phd/tex_projects/gcp_icml2024/ec_criterion_whiteoak.png"
+            "~/phd/tex_projects/gcp_icml2024/ec_criterion_whiteoak.png"
         )
         # plt.show()
